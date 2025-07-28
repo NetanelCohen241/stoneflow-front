@@ -190,6 +190,11 @@ export function I18nProvider({ children, initialLang }: { children: React.ReactN
     localStorage.setItem('lang', l)
   }
 
+  useEffect(() => {
+    document.documentElement.lang = lang
+    document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr'
+  }, [lang])
+
   const t = (key: string, params?: Record<string, string | number>) => {
     const str = translations[lang][key] || translations.he[key] || translations.en[key] || key
     if (!params) return str
