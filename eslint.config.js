@@ -11,12 +11,10 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
+        ecmaFeatures: { jsx: true },
       },
     },
-    plugins: {
-      react: eslintPluginReact,
-      '@typescript-eslint': eslintPluginTs,
-    },
+    plugins: { react: eslintPluginReact, '@typescript-eslint': eslintPluginTs },
     rules: {
       'react/react-in-jsx-scope': 'off',
     },

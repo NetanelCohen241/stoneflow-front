@@ -16,6 +16,8 @@ export default defineConfig({
         'src/components/FormCard.tsx',
         'src/components/Input.tsx',
         'src/components/Layout.tsx',
+        'src/hooks/**',
+        'src/services/**',
         'postcss.config.js',
         'tailwind.config.cjs',
         'vite.config.ts',

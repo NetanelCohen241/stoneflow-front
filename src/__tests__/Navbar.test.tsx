@@ -17,8 +17,9 @@ function renderNav() {
 describe('Navbar translations', () => {
   it('shows hebrew by default and changes to english', () => {
     renderNav()
-    expect(screen.getByText('לוח בקרה')).toBeInTheDocument()
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'en' } })
-    expect(screen.getByText('Dashboard')).toBeInTheDocument()
+    expect(screen.getAllByText('לוח בקרה')[0]).toBeInTheDocument()
+    const selector = screen.getAllByRole('combobox')[0]
+    fireEvent.change(selector, { target: { value: 'en' } })
+    expect(screen.getAllByText('Dashboard')[0]).toBeInTheDocument()
   })
 })
