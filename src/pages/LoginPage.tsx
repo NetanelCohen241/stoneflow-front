@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useI18n } from '../i18n';
 
 /**
  * Login page component.
@@ -13,6 +14,7 @@ import { useAuth } from '../hooks/useAuth';
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -35,14 +37,14 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen px-4 pt-20 md:pt-0">
       <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Log in</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">{t('login.title')}</h2>
         {error && (
           <div className="mb-4 text-red-600 text-sm text-center">{error}</div>
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-stone-700">
-              Email
+              {t('login.email')}
             </label>
             <input
               id="email"
@@ -56,7 +58,7 @@ export default function LoginPage() {
           </div>
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-stone-700">
-              Password
+              {t('login.password')}
             </label>
             <input
               id="password"
@@ -73,13 +75,13 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-primary text-white py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading ? 'Logging in...' : 'Log in'}
+            {loading ? t('login.submitLoading') : t('login.submit')}
           </button>
         </form>
         <p className="mt-4 text-center text-sm">
-          Don’t have an account?{' '}
+          {t('login.signupPrompt')} {' '}
           <Link to="/signup" className="text-blue-600 hover:underline">
-            Sign up
+            {t('login.signupLink')}
           </Link>
         </p>
       </div>

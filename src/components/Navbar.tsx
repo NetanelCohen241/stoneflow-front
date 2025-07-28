@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useI18n, Lang } from '../i18n'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const { t, lang, setLang } = useI18n()
 
   const toggleMenu = () => setOpen((o) => !o)
 
@@ -30,21 +32,30 @@ export default function Navbar() {
             />
           </svg>
         </button>
-        <div className="hidden md:flex space-x-4">
-          <Link to="/dashboard" className="text-gray-700 hover:text-blue-600">Dashboard</Link>
-          <Link to="/orders/new" className="text-gray-700 hover:text-blue-600">New Order</Link>
-          <Link to="/viewer" className="text-gray-700 hover:text-blue-600">Viewer</Link>
-          <Link to="/settings" className="text-gray-700 hover:text-blue-600">Settings</Link>
+        <div className="hidden md:flex space-x-4 items-center">
+          <Link to="/dashboard" className="text-gray-700 hover:text-blue-600">{t('navbar.dashboard')}</Link>
+          <Link to="/orders/new" className="text-gray-700 hover:text-blue-600">{t('navbar.newOrder')}</Link>
+          <Link to="/viewer" className="text-gray-700 hover:text-blue-600">{t('navbar.viewer')}</Link>
+          <Link to="/settings" className="text-gray-700 hover:text-blue-600">{t('navbar.settings')}</Link>
+          <select
+            value={lang}
+            onChange={(e) => setLang(e.target.value as Lang)}
+            className="ml-2 border border-gray-300 rounded"
+            data-testid="lang-select"
+          >
+            <option value="he">עברית</option>
+            <option value="en">English</option>
+          </select>
         </div>
       </div>
       <div
         className={`mt-2 space-y-2 md:hidden ${open ? 'block' : 'hidden'}`}
         data-testid="mobile-menu"
       >
-        <Link to="/dashboard" className="block text-gray-700 hover:text-blue-600">Dashboard</Link>
-        <Link to="/orders/new" className="block text-gray-700 hover:text-blue-600">New Order</Link>
-        <Link to="/viewer" className="block text-gray-700 hover:text-blue-600">Viewer</Link>
-        <Link to="/settings" className="block text-gray-700 hover:text-blue-600">Settings</Link>
+        <Link to="/dashboard" className="block text-gray-700 hover:text-blue-600">{t('navbar.dashboard')}</Link>
+        <Link to="/orders/new" className="block text-gray-700 hover:text-blue-600">{t('navbar.newOrder')}</Link>
+        <Link to="/viewer" className="block text-gray-700 hover:text-blue-600">{t('navbar.viewer')}</Link>
+        <Link to="/settings" className="block text-gray-700 hover:text-blue-600">{t('navbar.settings')}</Link>
       </div>
     </nav>
   )

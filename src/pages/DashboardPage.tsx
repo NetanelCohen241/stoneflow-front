@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getOrders, Order, OrderStatus } from '../services/orders';
+import { useI18n } from '../i18n';
 
 /**
  * Dashboard page component.
@@ -14,32 +15,33 @@ export default function DashboardPage() {
   const [statusFilter, setStatusFilter] = useState<OrderStatus | 'All'>('All');
   const orders = useMemo(() => getOrders(), []);
   const filtered = statusFilter === 'All' ? orders : orders.filter((o) => o.status === statusFilter);
+  const { t } = useI18n();
 
   return (
     <div className="p-4 pb-20 md:pb-4 space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Orders</h2>
+        <h2 className="text-2xl font-bold">{t('dashboard.title')}</h2>
         <Link to="/orders/new" className="bg-accent text-white px-4 py-2 rounded-md shadow hover:bg-orange-600">
-          + New Order
+          {t('dashboard.newOrder')}
         </Link>
       </div>
       <div className="flex items-center space-x-2">
-        <label htmlFor="status" className="text-sm font-medium">Filter:</label>
+        <label htmlFor="status" className="text-sm font-medium">{t('dashboard.filter')}</label>
         <select
           id="status"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as OrderStatus | 'All')}
           className="bg-white"
         >
-          <option value="All">All</option>
-          <option value="New">New</option>
-          <option value="In Production">In Production</option>
-          <option value="Completed">Completed</option>
-          <option value="Cancelled">Cancelled</option>
+          <option value="All">{t('dashboard.all')}</option>
+          <option value="New">{t('status.new')}</option>
+          <option value="In Production">{t('status.inProduction')}</option>
+          <option value="Completed">{t('status.completed')}</option>
+          <option value="Cancelled">{t('status.cancelled')}</option>
         </select>
       </div>
       {filtered.length === 0 ? (
-        <p className="text-stone-500">No orders yet. Create one to get started.</p>
+        <p className="text-stone-500">{t('dashboard.noOrders')}</p>
       ) : (
         <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((order) => (
