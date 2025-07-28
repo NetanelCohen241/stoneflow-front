@@ -16,6 +16,8 @@ describe('Navbar', () => {
     )
     expect(screen.getAllByText('Dashboard')[0]).toBeInTheDocument()
     expect(screen.getAllByText('New Order')[0]).toBeInTheDocument()
+    const nav = screen.getByRole('navigation')
+    expect(nav).toHaveClass('bg-gradient-to-r')
   })
 
   it('toggles mobile menu', async () => {
