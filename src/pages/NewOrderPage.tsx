@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createOrder, Piece, Cutout } from '../services/orders';
+import { createOrder, createOrderApi, Piece, Cutout } from '../services/orders';
+import { useAuth } from '../hooks/useAuth';
 import { useI18n } from '../i18n';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -16,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default function NewOrderPage() {
   const navigate = useNavigate();
   const { t } = useI18n();
+  const { token } = useAuth();
   const [customerName, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
@@ -75,20 +77,27 @@ export default function NewOrderPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerName || !phone || !address || pieces.length === 0) {
       alert(t('newOrder.completeAlert'));
       return;
     }
-    const order = createOrder({
-      customerName: customerName.trim(),
-      phone: phone.trim(),
-      address: address.trim(),
-      surfaceType,
-      material,
-      pieces,
-    });
+    if (!token) {
+      alert('Not authenticated');
+      return;
+    }
+    const order = await createOrderApi(
+      {
+        customerName: customerName.trim(),
+        phone: phone.trim(),
+        address: address.trim(),
+        surfaceType,
+        material,
+        pieces,
+      },
+      token
+    );
     navigate(`/orders/${order.id}`);
   };
 

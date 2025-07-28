@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { apiLogin, apiRegister } from '../services/api';
 
 interface AuthContextValue {
   isAuthenticated: boolean;
@@ -31,22 +32,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    // In a real app, send a request to the API to authenticate.
-    // Here we simulate successful login for any non‑empty credentials.
     if (!email || !password) {
       throw new Error('Email and password are required');
     }
-    const fakeToken = btoa(`${email}:${password}`);
-    localStorage.setItem('token', fakeToken);
-    setToken(fakeToken);
+    const { access_token } = await apiLogin(email, password);
+    localStorage.setItem('token', access_token);
+    setToken(access_token);
   };
 
   const register = async (name: string, email: string, password: string) => {
-    // Simulate registration. In a real app this would call the backend.
     if (!name || !email || !password) {
       throw new Error('All fields are required');
     }
-    // After registration, log the user in directly.
+    await apiRegister({ name, email, password });
     await login(email, password);
   };
 
