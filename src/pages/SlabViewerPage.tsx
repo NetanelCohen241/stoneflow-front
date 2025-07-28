@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getOrder, Order, Piece } from '../services/orders';
+import { useI18n } from '../i18n';
 
 /**
  * Slab viewer page component.
@@ -16,6 +17,7 @@ export default function SlabViewerPage() {
   const [order, setOrder] = useState<Order | undefined>(undefined);
   const [piece, setPiece] = useState<Piece | undefined>(undefined);
   const [material, setMaterial] = useState<string>('Granite');
+  const { t } = useI18n();
 
   useEffect(() => {
     if (!orderId || !pieceId) return;
@@ -29,7 +31,7 @@ export default function SlabViewerPage() {
   if (!order || !piece) {
     return (
       <div className="p-4">
-        <p>Slab not found.</p>
+        <p>{t('slabViewer.notFound')}</p>
       </div>
     );
   }
@@ -47,9 +49,9 @@ export default function SlabViewerPage() {
   return (
     <div className="p-4 space-y-4 pb-20 md:pb-4">
       <Link to={`/orders/${order.id}`} className="text-blue-600 hover:underline">
-        ← Back to Order
+        {t('slabViewer.back')}
       </Link>
-      <h2 className="text-2xl font-bold">3D Slab Viewer</h2>
+      <h2 className="text-2xl font-bold">{t('slabViewer.title')}</h2>
       <div className="flex flex-col md:flex-row md:space-x-8">
         {/* 3D model container */}
         <div className="flex-1 flex items-center justify-center h-64 md:h-96">
@@ -99,16 +101,16 @@ export default function SlabViewerPage() {
         {/* Controls */}
         <div className="w-full md:w-64 space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Material</label>
+            <label className="block text-sm font-medium mb-1">{t('slabViewer.material')}</label>
             <select
               value={material}
               onChange={(e) => setMaterial(e.target.value)}
               className="w-full bg-white"
             >
-              <option>Quartz</option>
-              <option>Granite</option>
-              <option>Marble</option>
-              <option>Concrete</option>
+              <option>{t('material.quartz')}</option>
+              <option>{t('material.granite')}</option>
+              <option>{t('material.marble')}</option>
+              <option>{t('material.concrete')}</option>
             </select>
           </div>
           <button
@@ -116,7 +118,7 @@ export default function SlabViewerPage() {
             className="w-full bg-primary text-white py-2 rounded-md hover:bg-blue-700"
             onClick={() => alert('PDF export not implemented')}
           >
-            Download PDF
+            {t('slabViewer.downloadPdf')}
           </button>
         </div>
       </div>

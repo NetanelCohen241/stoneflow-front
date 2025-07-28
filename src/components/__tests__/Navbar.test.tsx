@@ -3,12 +3,15 @@ import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 import { BrowserRouter } from 'react-router-dom'
 import Navbar from '../Navbar'
+import { I18nProvider } from '../../i18n'
 
 describe('Navbar', () => {
   it('renders desktop links', () => {
     render(
       <BrowserRouter>
-        <Navbar />
+        <I18nProvider initialLang="en">
+          <Navbar />
+        </I18nProvider>
       </BrowserRouter>
     )
     expect(screen.getAllByText('Dashboard')[0]).toBeInTheDocument()
@@ -19,7 +22,9 @@ describe('Navbar', () => {
     const user = userEvent.setup()
     render(
       <BrowserRouter>
-        <Navbar />
+        <I18nProvider initialLang="en">
+          <Navbar />
+        </I18nProvider>
       </BrowserRouter>
     )
     const menu = screen.getByTestId('mobile-menu')

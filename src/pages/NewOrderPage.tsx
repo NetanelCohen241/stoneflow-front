@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createOrder, Piece, Cutout } from '../services/orders';
+import { useI18n } from '../i18n';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -14,6 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
  */
 export default function NewOrderPage() {
   const navigate = useNavigate();
+  const { t } = useI18n();
   const [customerName, setCustomerName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
@@ -76,7 +78,7 @@ export default function NewOrderPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerName || !phone || !address || pieces.length === 0) {
-      alert('Please complete all order details and add at least one piece.');
+      alert(t('newOrder.completeAlert'));
       return;
     }
     const order = createOrder({
@@ -92,11 +94,11 @@ export default function NewOrderPage() {
 
   return (
     <div className="p-4 pb-24 md:pb-4 space-y-6">
-      <h2 className="text-2xl font-bold">New Order</h2>
+      <h2 className="text-2xl font-bold">{t('newOrder.title')}</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium mb-1">Customer Name</label>
+            <label className="block text-sm font-medium mb-1">{t('newOrder.customerName')}</label>
             <input
               type="text"
               value={customerName}
@@ -106,7 +108,7 @@ export default function NewOrderPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Phone</label>
+            <label className="block text-sm font-medium mb-1">{t('newOrder.phone')}</label>
             <input
               type="tel"
               value={phone}
@@ -116,7 +118,7 @@ export default function NewOrderPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Address</label>
+            <label className="block text-sm font-medium mb-1">{t('newOrder.address')}</label>
             <input
               type="text"
               value={address}
@@ -126,30 +128,30 @@ export default function NewOrderPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Surface Type</label>
+            <label className="block text-sm font-medium mb-1">{t('newOrder.surfaceType')}</label>
             <select value={surfaceType} onChange={(e) => setSurfaceType(e.target.value)} className="w-full bg-white">
-              <option>Kitchen</option>
-              <option>Bathroom</option>
-              <option>Bar</option>
-              <option>Other</option>
+              <option>{t('surface.kitchen')}</option>
+              <option>{t('surface.bathroom')}</option>
+              <option>{t('surface.bar')}</option>
+              <option>{t('surface.other')}</option>
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">Material</label>
+            <label className="block text-sm font-medium mb-1">{t('newOrder.material')}</label>
             <select value={material} onChange={(e) => setMaterial(e.target.value)} className="w-full bg-white">
-              <option>Quartz</option>
-              <option>Granite</option>
-              <option>Marble</option>
-              <option>Concrete</option>
+              <option>{t('material.quartz')}</option>
+              <option>{t('material.granite')}</option>
+              <option>{t('material.marble')}</option>
+              <option>{t('material.concrete')}</option>
             </select>
           </div>
         </div>
         {/* Piece definition */}
         <div className="border-t pt-6">
-          <h3 className="text-xl font-semibold mb-4">Add Slab Piece</h3>
+          <h3 className="text-xl font-semibold mb-4">{t('newOrder.addSlabPiece')}</h3>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium mb-1">Width (cm)</label>
+              <label className="block text-sm font-medium mb-1">{t('newOrder.width')}</label>
               <input
                 type="number"
                 value={pieceWidth}
@@ -159,7 +161,7 @@ export default function NewOrderPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Height (cm)</label>
+              <label className="block text-sm font-medium mb-1">{t('newOrder.height')}</label>
               <input
                 type="number"
                 value={pieceHeight}
@@ -172,20 +174,20 @@ export default function NewOrderPage() {
           {/* Cutouts Section */}
           <div className="mt-4 space-y-4">
             <div className="flex items-center justify-between">
-              <h4 className="font-medium">Cutouts</h4>
+              <h4 className="font-medium">{t('newOrder.cutouts')}</h4>
               <button
                 type="button"
                 onClick={handleAddCutout}
                 className="text-sm text-blue-600 hover:underline"
               >
-                + Add Cutout
+                {t('newOrder.addCutout')}
               </button>
             </div>
-            {cutouts.length === 0 && <p className="text-sm text-stone-500">No cutouts defined.</p>}
+            {cutouts.length === 0 && <p className="text-sm text-stone-500">{t('newOrder.noCutouts')}</p>}
             {cutouts.map((cutout, idx) => (
               <div key={idx} className="grid gap-2 grid-cols-4 items-end">
                 <div>
-                  <label className="block text-xs mb-1">X (cm)</label>
+                  <label className="block text-xs mb-1">{t('newOrder.x')}</label>
                   <input
                     type="number"
                     value={cutout.x}
@@ -195,7 +197,7 @@ export default function NewOrderPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs mb-1">Y (cm)</label>
+                  <label className="block text-xs mb-1">{t('newOrder.y')}</label>
                   <input
                     type="number"
                     value={cutout.y}
@@ -205,7 +207,7 @@ export default function NewOrderPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs mb-1">Width (cm)</label>
+                  <label className="block text-xs mb-1">{t('newOrder.width')}</label>
                   <input
                     type="number"
                     value={cutout.width}
@@ -215,7 +217,7 @@ export default function NewOrderPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs mb-1">Height (cm)</label>
+                  <label className="block text-xs mb-1">{t('newOrder.height')}</label>
                   <input
                     type="number"
                     value={cutout.height}
@@ -229,14 +231,14 @@ export default function NewOrderPage() {
                   onClick={() => handleRemoveCutout(idx)}
                   className="text-xs text-red-600 hover:underline ml-2"
                 >
-                  Remove
+                  {t('newOrder.remove')}
                 </button>
               </div>
             ))}
           </div>
           {/* Photo upload */}
           <div className="mt-4">
-            <label className="block text-sm font-medium mb-1">Upload Photo</label>
+            <label className="block text-sm font-medium mb-1">{t('newOrder.uploadPhoto')}</label>
             <input type="file" accept="image/*" onChange={handlePhotoChange} />
             {piecePhoto && (
               <img src={piecePhoto} alt="Preview" className="mt-2 w-32 h-32 object-cover rounded" />
@@ -249,13 +251,13 @@ export default function NewOrderPage() {
             disabled={!pieceWidth || !pieceHeight}
             className="mt-4 bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
           >
-            + Add Piece
+            {t('newOrder.addPiece')}
           </button>
         </div>
         {/* List of added pieces */}
         {pieces.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-xl font-semibold mb-2">Pieces</h3>
+            <h3 className="text-xl font-semibold mb-2">{t('newOrder.pieces')}</h3>
             <ul className="space-y-2">
               {pieces.map((p, idx) => (
                 <li key={p.id} className="border p-3 rounded-md flex items-center justify-between">
@@ -274,7 +276,7 @@ export default function NewOrderPage() {
           type="submit"
           className="w-full bg-accent text-white py-2 rounded-md hover:bg-orange-600"
         >
-          Create Order
+          {t('newOrder.create')}
         </button>
       </form>
     </div>
