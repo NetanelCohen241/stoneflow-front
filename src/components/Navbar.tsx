@@ -9,11 +9,11 @@ export default function Navbar() {
   const toggleMenu = () => setOpen((o) => !o)
 
   return (
-    <nav className="bg-white shadow-md px-6 py-4">
+    <nav className="bg-gradient-to-r from-primary to-accent text-white shadow-md px-6 py-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-bold text-gray-800">Stoneflow</h1>
+        <h1 className="text-xl font-bold">Stoneflow</h1>
         <button
-          className="md:hidden text-gray-700"
+          className="md:hidden text-white"
           aria-label="Toggle navigation"
           onClick={toggleMenu}
         >
@@ -33,14 +33,14 @@ export default function Navbar() {
           </svg>
         </button>
         <div className="hidden md:flex space-x-4 items-center">
-          <Link to="/dashboard" className="text-gray-700 hover:text-blue-600">{t('navbar.dashboard')}</Link>
-          <Link to="/orders/new" className="text-gray-700 hover:text-blue-600">{t('navbar.newOrder')}</Link>
-          <Link to="/viewer" className="text-gray-700 hover:text-blue-600">{t('navbar.viewer')}</Link>
-          <Link to="/settings" className="text-gray-700 hover:text-blue-600">{t('navbar.settings')}</Link>
+          <Link to="/dashboard" className="text-white/80 hover:text-white">{t('navbar.dashboard')}</Link>
+          <Link to="/orders/new" className="text-white/80 hover:text-white">{t('navbar.newOrder')}</Link>
+          <Link to="/viewer" className="text-white/80 hover:text-white">{t('navbar.viewer')}</Link>
+          <Link to="/settings" className="text-white/80 hover:text-white">{t('navbar.settings')}</Link>
           <select
             value={lang}
             onChange={(e) => setLang(e.target.value as Lang)}
-            className="ml-2 border border-gray-300 rounded"
+            className="ml-2 bg-transparent border border-white/50 rounded text-black md:text-white"
             data-testid="lang-select"
           >
             <option value="he">עברית</option>
@@ -52,10 +52,10 @@ export default function Navbar() {
         className={`mt-2 space-y-2 md:hidden ${open ? 'block' : 'hidden'}`}
         data-testid="mobile-menu"
       >
-        <Link to="/dashboard" className="block text-gray-700 hover:text-blue-600">{t('navbar.dashboard')}</Link>
-        <Link to="/orders/new" className="block text-gray-700 hover:text-blue-600">{t('navbar.newOrder')}</Link>
-        <Link to="/viewer" className="block text-gray-700 hover:text-blue-600">{t('navbar.viewer')}</Link>
-        <Link to="/settings" className="block text-gray-700 hover:text-blue-600">{t('navbar.settings')}</Link>
+        <Link to="/dashboard" className="block text-white/80 hover:text-white">{t('navbar.dashboard')}</Link>
+        <Link to="/orders/new" className="block text-white/80 hover:text-white">{t('navbar.newOrder')}</Link>
+        <Link to="/viewer" className="block text-white/80 hover:text-white">{t('navbar.viewer')}</Link>
+        <Link to="/settings" className="block text-white/80 hover:text-white">{t('navbar.settings')}</Link>
       </div>
     </nav>
   )

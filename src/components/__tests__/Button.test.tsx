@@ -3,9 +3,10 @@ import '@testing-library/jest-dom'
 import Button from '../Button'
 
 describe('Button', () => {
-  it('applies primary background class', () => {
+  it('uses gradient styling', () => {
     render(<Button>Click</Button>)
     const btn = screen.getByRole('button')
-    expect(btn).toHaveClass('bg-primary')
+    expect(btn).toHaveClass('from-primary')
+    expect(btn).toHaveClass('to-accent')
   })
 })
