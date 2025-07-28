@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { apiCreateOrder, OrderRequest } from './api';
 
 export type OrderStatus = 'New' | 'In Production' | 'Completed' | 'Cancelled';
 
@@ -69,6 +70,19 @@ export function createOrder(order: Omit<Order, 'id' | 'createdAt' | 'status'>): 
   orders.push(newOrder);
   writeOrders(orders);
   return newOrder;
+}
+
+export async function createOrderApi(
+  order: Omit<Order, 'id' | 'createdAt' | 'status'>,
+  token: string
+): Promise<Order> {
+  const payload: OrderRequest = {
+    customer_id: uuidv4(),
+    location_type: order.surfaceType,
+    material_type: order.material,
+  };
+  await apiCreateOrder(payload, token);
+  return createOrder(order);
 }
 
 /**
