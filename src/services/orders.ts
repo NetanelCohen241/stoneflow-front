@@ -18,6 +18,14 @@ export interface Piece {
   photo?: string | null;
 }
 
+export interface KitchenItem {
+  id: string;
+  type: 'surface' | 'object';
+  description: string;
+  width: number;
+  height: number;
+}
+
 export interface Order {
   id: string;
   customerName: string;
@@ -26,6 +34,8 @@ export interface Order {
   surfaceType: string;
   material: string;
   pieces: Piece[];
+  kitchenPhoto?: string | null;
+  kitchenItems?: KitchenItem[];
   status: OrderStatus;
   createdAt: string;
 }

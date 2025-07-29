@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createOrder, createOrderApi, Piece, Cutout } from '../services/orders';
+import { createOrder, createOrderApi, Piece, Cutout, KitchenItem } from '../services/orders';
 import { useAuth } from '../hooks/useAuth';
 import { useI18n } from '../i18n';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,6 +30,9 @@ export default function NewOrderPage() {
   const [cutouts, setCutouts] = useState<Cutout[]>([]);
   const [piecePhoto, setPiecePhoto] = useState<string | null>(null);
   const [pieces, setPieces] = useState<Piece[]>([]);
+
+  const [kitchenPhoto, setKitchenPhoto] = useState<string | null>(null);
+  const [kitchenItems, setKitchenItems] = useState<KitchenItem[]>([]);
 
   const resetPieceForm = () => {
     setPieceWidth('');
@@ -61,6 +64,38 @@ export default function NewOrderPage() {
       setPiecePhoto(reader.result as string);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleKitchenPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setKitchenPhoto(null);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => setKitchenPhoto(reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const addKitchenItem = (type: 'surface' | 'object') => {
+    setKitchenItems((prev) => [
+      ...prev,
+      { id: uuidv4(), type, description: '', width: 0, height: 0 },
+    ]);
+  };
+
+  const updateKitchenItem = (
+    id: string,
+    field: keyof KitchenItem,
+    value: string | number
+  ) => {
+    setKitchenItems((prev) =>
+      prev.map((i) => (i.id === id ? { ...i, [field]: value } : i))
+    );
+  };
+
+  const removeKitchenItem = (id: string) => {
+    setKitchenItems((prev) => prev.filter((i) => i.id !== id));
   };
 
   const handleAddPiece = () => {
@@ -95,6 +130,8 @@ export default function NewOrderPage() {
         surfaceType,
         material,
         pieces,
+        kitchenPhoto,
+        kitchenItems,
       },
       token
     );
@@ -153,6 +190,99 @@ export default function NewOrderPage() {
               <option>{t('material.marble')}</option>
               <option>{t('material.concrete')}</option>
             </select>
+          </div>
+        </div>
+        {/* Kitchen photo & surfaces */}
+        <div className="border-t pt-6 space-y-4">
+          <h3 className="text-xl font-semibold">{t('newOrder.kitchenSection')}</h3>
+          <div>
+            <label className="block text-sm font-medium mb-1">{t('newOrder.capturePhoto')}</label>
+            <input type="file" accept="image/*" capture="environment" onChange={handleKitchenPhotoChange} />
+            {kitchenPhoto && (
+              <img src={kitchenPhoto} alt="kitchen" className="mt-2 w-full max-w-xs rounded" />
+            )}
+          </div>
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="font-medium">{t('newOrder.surfaces')}</h4>
+              <button type="button" onClick={() => addKitchenItem('surface')} className="text-sm text-blue-600 hover:underline">
+                {t('newOrder.addSurface')}
+              </button>
+            </div>
+            {kitchenItems.filter((i) => i.type === 'surface').length === 0 && (
+              <p className="text-sm text-stone-500">-</p>
+            )}
+            {kitchenItems
+              .filter((i) => i.type === 'surface')
+              .map((item, idx) => (
+                <div key={item.id} className="grid gap-2 md:grid-cols-4 items-end mb-2">
+                  <input
+                    type="text"
+                    value={item.description}
+                    onChange={(e) => updateKitchenItem(item.id, 'description', e.target.value)}
+                    placeholder={t('newOrder.description') + ` ${idx + 1}`}
+                    className="w-full border px-2 py-1 rounded"
+                  />
+                  <input
+                    type="number"
+                    value={item.width}
+                    onChange={(e) => updateKitchenItem(item.id, 'width', Number(e.target.value))}
+                    className="w-full border px-2 py-1 rounded"
+                    min={0}
+                  />
+                  <input
+                    type="number"
+                    value={item.height}
+                    onChange={(e) => updateKitchenItem(item.id, 'height', Number(e.target.value))}
+                    className="w-full border px-2 py-1 rounded"
+                    min={0}
+                  />
+                  <button type="button" onClick={() => removeKitchenItem(item.id)} className="text-xs text-red-600 hover:underline">
+                    {t('newOrder.remove')}
+                  </button>
+                </div>
+              ))}
+          </div>
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="font-medium">{t('newOrder.objects')}</h4>
+              <button type="button" onClick={() => addKitchenItem('object')} className="text-sm text-blue-600 hover:underline">
+                {t('newOrder.addObject')}
+              </button>
+            </div>
+            {kitchenItems.filter((i) => i.type === 'object').length === 0 && (
+              <p className="text-sm text-stone-500">-</p>
+            )}
+            {kitchenItems
+              .filter((i) => i.type === 'object')
+              .map((item, idx) => (
+                <div key={item.id} className="grid gap-2 md:grid-cols-4 items-end mb-2">
+                  <input
+                    type="text"
+                    value={item.description}
+                    onChange={(e) => updateKitchenItem(item.id, 'description', e.target.value)}
+                    placeholder={t('newOrder.description') + ` ${idx + 1}`}
+                    className="w-full border px-2 py-1 rounded"
+                  />
+                  <input
+                    type="number"
+                    value={item.width}
+                    onChange={(e) => updateKitchenItem(item.id, 'width', Number(e.target.value))}
+                    className="w-full border px-2 py-1 rounded"
+                    min={0}
+                  />
+                  <input
+                    type="number"
+                    value={item.height}
+                    onChange={(e) => updateKitchenItem(item.id, 'height', Number(e.target.value))}
+                    className="w-full border px-2 py-1 rounded"
+                    min={0}
+                  />
+                  <button type="button" onClick={() => removeKitchenItem(item.id)} className="text-xs text-red-600 hover:underline">
+                    {t('newOrder.remove')}
+                  </button>
+                </div>
+              ))}
           </div>
         </div>
         {/* Piece definition */}
