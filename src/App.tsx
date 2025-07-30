@@ -8,6 +8,7 @@ import NewOrderPage from './pages/NewOrderPage';
 import OrderDetailsPage from './pages/OrderDetailsPage';
 import SlabViewerPage from './pages/SlabViewerPage';
 import SettingsPage from './pages/SettingsPage';
+import SketchPage from './pages/SketchPage';
 import { useAuth } from './hooks/useAuth';
 
 /**
@@ -38,6 +39,7 @@ export default function App() {
               <Route path="/orders/:id" element={<OrderDetailsPage />} />
               <Route path="/viewer/:orderId/:pieceId" element={<SlabViewerPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/sketch" element={<SketchPage />} />
             </>
           )}
           {/* Catch‑all: redirect unknown routes to dashboard or login */}
